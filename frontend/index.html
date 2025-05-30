@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Frontend</title>
+</head>
+<body>
+  <h1>Microservices Frontend</h1>
+  <button onclick="login()">Login</button>
+
+  <script>
+    function login() {
+      fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: "admin", password: "1234" })
+      })
+      .then(res => res.json())
+      .then(data => alert(data.message));
+    }
+  </script>
+</body>
+</html>
+
