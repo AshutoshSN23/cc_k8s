@@ -1,9 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
 const app = express();
-
-const SECRET_KEY = 'your_secret_key';
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://ashutosh9655:Ashu9645@cluster0.vjrn8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
@@ -21,20 +18,21 @@ const User = mongoose.model('User', new mongoose.Schema({
 // Middleware to parse JSON
 app.use(express.json());
 
-// Middleware to verify token
+// Middleware to verify username
 app.use((req, res, next) => {
-  const token = req.headers.authorization;
+  const username = req.headers.username;
 
-  if (!token) {
-    return res.status(401).json({ success: false, message: 'No token provided' });
+  if (!username) {
+    return res.status(401).json({ success: false, message: 'No username provided' });
   }
 
-  try {
-    jwt.verify(token, SECRET_KEY);
-    next();
-  } catch (err) {
-    res.status(401).json({ success: false, message: 'Invalid token' });
+  const user = users.find(u => u.username === username);
+
+  if (!user) {
+    return res.status(401).json({ success: false, message: 'Invalid username' });
   }
+
+  next();
 });
 
 // Route to get all users
